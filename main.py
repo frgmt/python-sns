@@ -14,6 +14,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--sns', default='twitter')
+    parser.add_argument('--follow', default=True, type=bool)
     args = parser.parse_args()
 
     if args.sns == 'twitter':
@@ -23,8 +24,10 @@ if __name__ == '__main__':
             try:
                 twitter.login()
                 twitter.search(keyword)
-                # twitter.follow()
-                twitter.like()
+                if args.follow:
+                    twitter.follow()
+                else:
+                    twitter.like()
             except Exception as e:
                 print(e)
             finally:
@@ -37,8 +40,10 @@ if __name__ == '__main__':
             try:
                 instagram.login()
                 instagram.search(keyword)
-                # instagram.follow()
-                instagram.like()
+                if args.follow:
+                    instagram.follow()
+                else:
+                    instagram.like()
             except Exception as e:
                 print(e)
             finally:
