@@ -1,5 +1,6 @@
 import logging
 import random
+import instaloader
 from time import sleep
 
 from credentials import INSTAGRAM_ID, INSTAGRAM_PASSWORD
@@ -12,6 +13,15 @@ class Instagram(Driver):
     def __init__(self):
         super(Instagram, self).__init__()
         self.page = None
+        # self.get_followers()
+
+    def get_followers(self):
+        L = instaloader.Instaloader()
+        L.login(INSTAGRAM_ID, INSTAGRAM_PASSWORD)  # (login)
+
+        profile = instaloader.Profile.from_username(L.context, INSTAGRAM_ID)
+        for follower in profile.get_followers():
+            print(follower.username)
 
     def login(self):
         try:
@@ -50,13 +60,16 @@ class Instagram(Driver):
             self.notify(self.page)
             logger.info('follow succeeded')
         else:
-            logger.error('follow failed')
+            logger.error('follow failed: {}'.format(self.page))
 
     def like(self):
         self.get(self.page)
         sleep(3)
         div = self.find_element_by_tag_name('main').find_element_by_tag_name('article').find_elements_by_xpath("./div")[-1]
         button = div.find_elements_by_xpath("./section")[0].find_elements_by_xpath("./span")[0].find_element_by_tag_name('button')
-        button.click()
-        self.notify(self.page)
-        logger.info('good succeeded')
+        try:
+            button.find_element_by_xpath('//svg[@area-label="「いいね！」を取り消す"]')
+        except:
+            button.click()
+            self.notify(self.page)
+            logger.info('good succeeded')

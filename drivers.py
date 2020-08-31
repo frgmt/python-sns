@@ -11,7 +11,7 @@ class Driver(webdriver.Chrome):
     def __init__(self):
         options = webdriver.ChromeOptions()
         # TODO cloud9で動かす場合はONにする
-        options.add_argument('--headless')
+        # options.add_argument('--headless')
         # options.add_argument('--disable-gpu')
         options.add_argument('--window-size=1920,1080')
         options.add_argument('--start-maximized')
@@ -38,7 +38,7 @@ class Driver(webdriver.Chrome):
     def login(self):
         raise NotImplementedError
 
-    def search(self):
+    def search(self, keyword):
         raise NotImplementedError
 
     def follow(self):

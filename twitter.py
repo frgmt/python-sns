@@ -52,7 +52,7 @@ class Twitter(Driver):
                 self.notify(self.user)
                 logger.info('follow succeeded')
                 return
-        logger.error('follow failed')
+        logger.error('follow failed: {}'.format(self.user))
 
     def like(self):
         self.like_btn.click()

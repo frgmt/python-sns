@@ -27,6 +27,8 @@ if __name__ == '__main__':
     parser.add_argument('--sns', default='twitter')
     parser.add_argument('--follow', default=True, type=str2bool)
     args = parser.parse_args()
+    i = 0
+    refresh_point = 5
 
     if args.sns == 'twitter':
         twitter = Twitter()
@@ -37,13 +39,21 @@ if __name__ == '__main__':
                 twitter.search(keyword)
                 if args.follow:
                     twitter.follow()
+                    if i % refresh_point == 0:
+                        twitter.refresh()
                 else:
-                    twitter.like()
+                    if i % refresh_point == 0:
+                        twitter.like()
+                        twitter.follow()
+                        twitter.refresh()
+                    else:
+                        twitter.like()
             except Exception as e:
                 print(e)
             finally:
                 # twitter.quit()
-                random_sleep(150, 600)
+                random_sleep(300, 600)
+                i += 1
     else:
         instagram = Instagram()
         while True:
@@ -53,10 +63,18 @@ if __name__ == '__main__':
                 instagram.search(keyword)
                 if args.follow:
                     instagram.follow()
+                    if i % refresh_point == 0:
+                        instagram.refresh()
                 else:
-                    instagram.like()
+                    if i % refresh_point == 0:
+                        instagram.like()
+                        instagram.follow()
+                        instagram.refresh()
+                    else:
+                        instagram.like()
             except Exception as e:
                 print(e)
             finally:
                 # instagram.quit()
-                random_sleep(150, 600)
+                random_sleep(300, 600)
+                i += 1
